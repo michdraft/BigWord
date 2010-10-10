@@ -15,11 +15,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.ProgressBar;
 
 public class BigWord extends Activity {
 	private static final String TAG = "BigWord";
 	
     private Stack<String> mHistory = new Stack<String>();
+    private WebView mWebView;
 
     private String mEntryTitle;
 	
@@ -28,9 +32,14 @@ public class BigWord extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
         final Intent intent = getIntent();
         final String action = intent.getAction();
         Log.v(TAG, "action=" + action);
+
+        mWebView = (WebView) findViewById(R.id.webview);
+
+        ExtendedWikiHelper.prepareUserAgent(this);
         
         if (Intent.ACTION_SEARCH.equals(action)) {
         	String query = intent.getStringExtra(SearchManager.QUERY);
@@ -61,6 +70,23 @@ public class BigWord extends Activity {
         return false;
     }
 
+    /**
+     * Set the title for the current entry.
+     */
+    protected void setEntryTitle(String entryText) {
+        mEntryTitle = entryText;
+        //mTitle.setText(mEntryTitle);
+    }
+
+    /**
+     * Set the content for the current entry. This will update our
+     * {@link WebView} to show the requested content.
+     */
+    protected void setEntryContent(String entryContent) {
+        mWebView.loadDataWithBaseURL(ExtendedWikiHelper.WIKI_AUTHORITY, entryContent,
+                ExtendedWikiHelper.MIME_TYPE, ExtendedWikiHelper.ENCODING, null);
+    }
+    
     private void startNavigating(String word, boolean pushHistory) {
         // Push any current word onto the history stack
         if (!TextUtils.isEmpty(mEntryTitle) && pushHistory) {
@@ -102,7 +128,26 @@ public class BigWord extends Activity {
             return parsedText;
         }
     	
-    	
+        /**
+         * Our progress update pushes a title bar update.
+         */
+        @Override
+        protected void onProgressUpdate(String... args) {
+            String searchWord = args[0];
+            setEntryTitle(searchWord);
+        }
+
+        /**
+         * When finished, push the newly-found entry content into our
+         * {@link WebView} and hide the {@link ProgressBar}.
+         */
+        @Override
+        protected void onPostExecute(String parsedText) {
+            //mTitleBar.startAnimation(mSlideOut);
+            //mProgress.setVisibility(View.INVISIBLE);
+
+            setEntryContent(parsedText);
+        }   	
     }
     
     

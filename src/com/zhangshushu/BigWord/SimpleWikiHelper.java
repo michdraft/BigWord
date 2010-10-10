@@ -44,7 +44,8 @@ import java.io.InputStream;
  * your application package name and version.
  */
 public class SimpleWikiHelper {
-    private static final String TAG = "SimpleWikiHelper";
+    //private static final String TAG = "SimpleWikiHelper";
+    private static final String TAG = "BigWord";
 
     /**
      * Partial URL to use when requesting the detailed entry for a specific
@@ -171,6 +172,8 @@ public class SimpleWikiHelper {
             throw new ApiException("User-Agent string must be prepared");
         }
 
+        Log.v(TAG, "url=" + url);
+        
         // Create client and set our specific user-agent string
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
