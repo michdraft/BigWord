@@ -41,7 +41,7 @@ public class BigWord extends Activity {
 
         ExtendedWikiHelper.prepareUserAgent(this);
         
-        if (Intent.ACTION_SEARCH.equals(action)) {
+        /*if (Intent.ACTION_SEARCH.equals(action)) {
         	String query = intent.getStringExtra(SearchManager.QUERY);
         	Log.v(TAG, "query=" + query);
         	startNavigating(query, true);
@@ -49,7 +49,7 @@ public class BigWord extends Activity {
         else {
         	Log.v(TAG, "other intents");
             onSearchRequested();
-        }
+        }*/
     }
     
     @Override
