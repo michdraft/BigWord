@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, BigWord!</string>
+    <string name="word_label">Word:</string>
     <string name="app_name">Big Word</string>
     <string name="icon_title">Learn with Big Word 2</string>
     <string name="search_hint">Search wikitionary</string>

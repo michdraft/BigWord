@@ -4,16 +4,31 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-    android:layout_width="fill_parent" 
+<LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent">
+      <TextView  
+    android:layout_width="wrap_content" 
     android:layout_height="wrap_content" 
-    android:text="@string/hello"
+    android:text="@string/word_label"
     />
+    <EditText 
+      android:id="@+id/entry"
+        android:layout_width="100px"
+        android:layout_height="wrap_content" />
+     <Button
+        android:id="@+id/ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dip"
+        android:text="OK" />
+</LinearLayout>
 <WebView
     android:id="@+id/webview"
     android:layout_width="fill_parent"
-    android:layout_height="100dip"
+    android:layout_height="fill_parent"
     android:layout_weight="1" />
-    android:text="fufuhehe"
     />
 </LinearLayout>
