@@ -1,13 +1,6 @@
 package com.zhangshushu.BigWord;
 
-import java.util.Stack;
-
-import com.zhangshushu.BigWord.SimpleWikiHelper.ApiException;
-import com.zhangshushu.BigWord.SimpleWikiHelper.ParseException;
-
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,10 +10,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-public class BigWord extends Activity {
+import com.zhangshushu.BigWord.SimpleWikiHelper.ApiException;
+import com.zhangshushu.BigWord.SimpleWikiHelper.ParseException;
+
+import java.util.Stack;
+
+public class BigWord extends Activity implements View.OnClickListener {
 	private static final String TAG = "BigWord";
+	
+	private String mWord;
 	
     private Stack<String> mHistory = new Stack<String>();
     private WebView mWebView;
@@ -33,39 +36,26 @@ public class BigWord extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
-        Log.v(TAG, "action=" + action);
-
+        Button b = (Button) findViewById(R.id.search);
+        b.setOnClickListener(this);
         mWebView = (WebView) findViewById(R.id.webview);
-
         ExtendedWikiHelper.prepareUserAgent(this);
-        
-        /*if (Intent.ACTION_SEARCH.equals(action)) {
-        	String query = intent.getStringExtra(SearchManager.QUERY);
-        	Log.v(TAG, "query=" + query);
-        	startNavigating(query, true);
-        }
-        else {
-        	Log.v(TAG, "other intents");
-            onSearchRequested();
-        }*/
     }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.bigword, menu);
+        //inflater.inflate(R.menu.bigword, menu);
         return true;
     }    
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.lookup_search: {
+            /*case R.id.lookup_search: {
                 onSearchRequested();
                 return true;
-            }
+            }*/
         }
         return false;
     }
@@ -74,7 +64,7 @@ public class BigWord extends Activity {
      * Set the title for the current entry.
      */
     protected void setEntryTitle(String entryText) {
-        mEntryTitle = entryText;
+        //mEntryTitle = entryText;
         //mTitle.setText(mEntryTitle);
     }
 
@@ -147,10 +137,15 @@ public class BigWord extends Activity {
             //mProgress.setVisibility(View.INVISIBLE);
 
             setEntryContent(parsedText);
-        }   	
+        }
     }
     
-    
+    public void onClick(View v) {
+      TextView tv = (TextView) findViewById(R.id.word);
+      mWord = tv.getText().toString();
+      Log.v(TAG, "word=" + tv.getText());
+      startNavigating(mWord, true);
+    }   
     
     
     
