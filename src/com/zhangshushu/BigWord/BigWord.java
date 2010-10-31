@@ -3,6 +3,7 @@ package com.zhangshushu.BigWord;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -11,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,6 +40,7 @@ public class BigWord extends Activity implements View.OnClickListener {
         b.setOnClickListener(this);
         mWebView = (WebView) findViewById(R.id.webview);
         ExtendedWikiHelper.prepareUserAgent(this);
+        //android.os.Debug.startMethodTracing("calc");
     }
     
     @Override
@@ -141,12 +142,16 @@ public class BigWord extends Activity implements View.OnClickListener {
     }
     
     public void onClick(View v) {
-      TextView tv = (TextView) findViewById(R.id.word);
-      mWord = tv.getText().toString();
-      Log.v(TAG, "word=" + tv.getText());
-      startNavigating(mWord, true);
+        TextView tv = (TextView) findViewById(R.id.word);
+        mWord = tv.getText().toString();
+        Log.v(TAG, "word=" + tv.getText());
+        startNavigating(mWord, true);
     }   
     
-    
+    @Override
+    public void onDestroy() {
+      //android.os.Debug.stopMethodTracing();
+      super.onDestroy();
+    }
     
 }
