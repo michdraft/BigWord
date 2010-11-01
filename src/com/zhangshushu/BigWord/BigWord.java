@@ -1,32 +1,37 @@
 package com.zhangshushu.BigWord;
 
+import java.util.Stack;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Debug;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhangshushu.BigWord.SimpleWikiHelper.ApiException;
 import com.zhangshushu.BigWord.SimpleWikiHelper.ParseException;
-
-import java.util.Stack;
 
 public class BigWord extends Activity implements View.OnClickListener {
 	private static final String TAG = "BigWord";
 	
 	private String mWord;
-	
+	private Button mSearchButton;
+	private WebView mWebView;
+    private EditText mWordText;
+    
     private Stack<String> mHistory = new Stack<String>();
-    private WebView mWebView;
 
     private String mEntryTitle;
 	
@@ -36,10 +41,28 @@ public class BigWord extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        Button b = (Button) findViewById(R.id.search);
-        b.setOnClickListener(this);
+        mSearchButton = (Button) findViewById(R.id.search);
+        mSearchButton.setOnClickListener(this);
+        
+        mWordText = (EditText) findViewById(R.id.word);
+        mWordText.setOnKeyListener(new OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                	mWord = mWordText.getText().toString();
+                	startNavigating(mWord, true);
+                    // Perform action on key press
+                    //Toast.makeText(BigWord.this, mWordText.getText(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        
         mWebView = (WebView) findViewById(R.id.webview);
         ExtendedWikiHelper.prepareUserAgent(this);
+        
         //android.os.Debug.startMethodTracing("calc");
     }
     
@@ -59,14 +82,6 @@ public class BigWord extends Activity implements View.OnClickListener {
             }*/
         }
         return false;
-    }
-
-    /**
-     * Set the title for the current entry.
-     */
-    protected void setEntryTitle(String entryText) {
-        //mEntryTitle = entryText;
-        //mTitle.setText(mEntryTitle);
     }
 
     /**
@@ -119,13 +134,8 @@ public class BigWord extends Activity implements View.OnClickListener {
             return parsedText;
         }
     	
-        /**
-         * Our progress update pushes a title bar update.
-         */
         @Override
         protected void onProgressUpdate(String... args) {
-            String searchWord = args[0];
-            setEntryTitle(searchWord);
         }
 
         /**
@@ -142,9 +152,8 @@ public class BigWord extends Activity implements View.OnClickListener {
     }
     
     public void onClick(View v) {
-        TextView tv = (TextView) findViewById(R.id.word);
-        mWord = tv.getText().toString();
-        Log.v(TAG, "word=" + tv.getText());
+        mWord = mWordText.getText().toString();
+        Log.v(TAG, "word=" + mWord);
         startNavigating(mWord, true);
     }   
     

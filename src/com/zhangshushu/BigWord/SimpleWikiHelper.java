@@ -44,7 +44,6 @@ import java.io.InputStream;
  * your application package name and version.
  */
 public class SimpleWikiHelper {
-    //private static final String TAG = "SimpleWikiHelper";
     private static final String TAG = "BigWord";
 
     /**
